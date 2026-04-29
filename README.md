@@ -1,10 +1,17 @@
-# 클라우드 파일 공유 시스템 (미니 드라이브)
+# Software Engineering Course (2026 Spring)
+**Name:** 김동현 (Kim Dong-hyeon)  
+**Major:** Software Engineering  
+**Student ID:** 2022125006
 
-본 프로젝트는 여러 팀이 동시에 협업하는 환경에서 파일을 중앙 관리하고 공유하기 위한 클라우드 기반 시스템입니다.
+## 📂 Repository Structure
+- `doc/`: 프로젝트 기획 및 설계 단계의 문서 산출물 보관
+- `src/`: 시스템 소스 코드 및 실행 파일 보관 (.gitkeep 포함)
 
-## 📂 폴더 구조 및 산출물 위치
-- `/doc`: 시스템 요구사항 정의서, 시스템 설계도 및 회의록 등 문서 파일
-- `/src`: 프론트엔드 및 백엔드 소스 코드
+## 📋 Task Deliverables Location
+과제 수행 결과물에 대한 위치 정보입니다.
 
-## 🛠 실행 및 빌드 방법
-*(추후 개발 언어 및 프레임워크가 확정되면 이 부분에 설치 및 실행 명령어를 명시합니다.)*
+| 과제 번호 | 과제명 | 파일 위치 (Path) |
+| :--- | :--- | :--- |
+| Project I | 시스템 요구사항 정의서 | `doc/System_Requirements.md` |
+| Project II | 시스템 품질 요소 추정서 | `doc/System_Quality_Attributes.md` |
+| Project IV | 프로젝트 관리 계획서 | `doc/Project_Management_Plan.md` |

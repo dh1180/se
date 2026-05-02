@@ -15,3 +15,4 @@
 | Project I | 시스템 요구사항 정의서 | `doc/System_Requirements.md` |
 | Project II | 시스템 품질 요소 추정서 | `doc/System_Quality_Attributes.md` |
 | Project IV | 프로젝트 관리 계획서 | `doc/Project_Management_Plan.md` |
+| Project VI | 요구사항 정의서 (과제3) | `doc/Requirements_Definition_Document.md` |

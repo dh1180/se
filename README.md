@@ -16,3 +16,4 @@
 | Project II | 시스템 품질 요소 추정서 | `doc/System_Quality_Attributes.md` |
 | Project IV | 프로젝트 관리 계획서 | `doc/Project_Management_Plan.md` |
 | Project VI | 요구사항 정의서 (과제3) | `doc/Requirements_Definition_Document.md` |
+| Project VIII | 요구사항 분석서 (과제4) | `doc/requirements_analysis.md` |

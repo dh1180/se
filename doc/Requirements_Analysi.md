@@ -1,23 +1,45 @@
 # 프로젝트 - 요구사항 분석서 (객체지향 분석)
 
 ## 1. 개요
-본 문서는 '클라우드 파일 공유 시스템 (미니 드라이브)'의 요구사항 정의서를 바탕으로, 객체지향 분석 기법을 적용하여 시스템의 동작과 구조를 분석한 문서이다. 사용자와 시스템 간의 상호작용을 정의하는 유스케이스 모델과 시스템 내부의 핵심 개념을 정의하는 도메인 모델을 포함한다.
+본 문서는 '클라우드 파일 공유 시스템 (미니 드라이브)'의 요구사항 정의서를 바탕으로, 객체지향 분석 기법을 적용하여 시스템의 동작과 구조를 분석한 문서이다. 기능 관점(유스케이스), 구조 관점(도메인 모델), 행위 관점(순차 모델)의 다이어그램을 포함하여 스테이크홀더 간의 명확한 이해를 돕는다.
 
 ---
 
-## 2. 유스케이스 모델링 (Use Case Modeling)
+## 2. 유스케이스 모델링 (기능 관점)
 
 ### 2.1 액터(Actor) 식별
-시스템과 상호작용하는 외부 엔티티(사용자 또는 외부 시스템)를 식별한다.
+시스템과 상호작용하는 외부 엔티티를 식별한다.
 * **일반 사용자 (User):** 시스템에 가입하여 파일을 업로드/다운로드하고, 타인과 공유하며 권한을 설정하는 주체
 * **인사 관리 시스템 (HR System):** 직원의 계정 정보를 동기화하기 위해 연동되는 사내 외부 시스템
 
-### 2.2 유스케이스(Use Case) 식별
-요구사항 정의서를 바탕으로 사용자가 시스템을 통해 수행하는 핵심 기능들을 식별한다.
-* **UC-01:** 파일 업로드 (FR-001)
-* **UC-02:** 파일 공유 링크 생성 (FR-002)
-* **UC-03:** 파일 접근 권한 설정 (FR-003)
-* **UC-04:** 삭제 파일 복구 (FR-005)
+### 2.2 유스케이스(Use Case) 식별 및 다이어그램
+요구사항 정의서를 바탕으로 사용자가 시스템을 통해 수행하는 핵심 기능들을 식별하고 시각화한다.
+
+```mermaid
+flowchart LR
+    User(("일반 사용자"))
+    HR(("HR 시스템"))
+
+    subgraph MiniDrive["미니 드라이브 시스템"]
+        direction TB
+        UC1(["UC-01: 파일 업로드"])
+        UC2(["UC-02: 공유 링크 생성"])
+        UC3(["UC-03: 접근 권한 설정"])
+        UC4(["UC-04: 삭제 파일 복구"])
+        UC5(["UC-05: 계정 로그인"])
+    end
+
+    User --- UC1
+    User --- UC2
+    User --- UC3
+    User --- UC4
+    User --- UC5
+
+    HR --- UC5
+    
+    UC1 -.->|"<<include>>"| UC5
+    UC2 -.->|"<<include>>"| UC3
+```
 
 ---
 
@@ -51,17 +73,93 @@
 
 ---
 
-## 4. 도메인 모델 (개념적 클래스 도출)
-요구사항 명세에 등장하는 주요 명사를 추출하여 시스템의 핵심 개념(객체)과 속성을 식별한다.
+## 4. 도메인 모델 (구조 관점)
+요구사항 명세에 등장하는 주요 개념을 추출하여 시스템의 핵심 객체와 속성, 메서드 및 관계를 정의한다.
 
-### 4.1 핵심 클래스 식별
-* **User (사용자):** 시스템을 이용하는 주체 `[속성: 사번, 이름, 이메일, 비밀번호, 잔여_용량]`
-* **File (파일):** 시스템에 저장되는 실제 데이터 `[속성: 파일ID, 파일명, 크기, 업로드일자, 삭제여부]`
-* **Folder (폴더):** 파일을 그룹화하는 논리적 단위 `[속성: 폴더ID, 폴더명, 생성일자, 부모폴더ID]`
-* **ShareLink (공유 링크):** 외부 공유를 위해 생성된 접근 정보 `[속성: 링크ID, URL주소, 비밀번호, 만료일자]`
-* **Permission (권한):** 특정 사용자나 링크에 부여된 파일 접근 권한 `[속성: 권한ID, 읽기여부, 수정여부, 다운로드여부]`
+### 4.1 클래스 다이어그램
+핵심 클래스 간의 관계(소유, 복합 등)와 세부 속성/메서드를 시각화한다.
 
-### 4.2 클래스 간의 관계 (Relationship)
-* 1명의 **User**는 여러 개의 **File**과 **Folder**를 소유한다. (1:N)
-* 1개의 **File**은 1개의 **ShareLink**를 가질 수 있다. (1:1 또는 1:0)
-* 1개의 **File**에는 여러 사용자에 대한 **Permission**이 설정될 수 있다. (1:N)
+```mermaid
+classDiagram
+    class User {
+        -String userId
+        -String name
+        -String email
+        -long remainingStorage
+        +login() boolean
+        +uploadFile(file) void
+        +createShareLink(fileId) String
+    }
+    class File {
+        -String fileId
+        -String fileName
+        -long size
+        -Date uploadDate
+        -boolean isDeleted
+        +saveMetadata() void
+        +moveToTrash() void
+        +restore() void
+    }
+    class Folder {
+        -String folderId
+        -String folderName
+        -String parentFolderId
+        +addFile(file) void
+        +delete() void
+    }
+    class ShareLink {
+        -String linkId
+        -String url
+        -String password
+        -Date expirationDate
+        +generateUrl() String
+        +validateExpiration() boolean
+    }
+    class Permission {
+        -String permissionId
+        -boolean canRead
+        -boolean canWrite
+        -boolean canDownload
+        +grantAccess() void
+        +revokeAccess() void
+    }
+
+    User "1" --> "*" File : 소유
+    User "1" --> "*" Folder : 소유
+    Folder "1" o-- "*" File : 포함 (Aggregation)
+    File "1" *-- "0..1" ShareLink : 생성 (Composition)
+    File "1" *-- "*" Permission : 할당 (Composition)
+```
+
+---
+
+## 5. 동적 모델링 (행위 관점)
+객체 간의 상호작용과 시간의 흐름에 따른 메시지 전달 과정을 정의한다.
+
+### 5.1 순차 다이어그램: 파일 업로드
+[UC-01] 파일 업로드 유스케이스의 정상 및 예외 흐름을 시각화한다.
+
+```mermaid
+sequenceDiagram
+    autonumber
+    actor User as 일반 사용자
+    participant UI as 시스템 UI
+    participant Ctrl as File Controller
+    participant DB as 데이터베이스
+
+    User->>UI: 파일 선택 및 '업로드' 요청
+    UI->>Ctrl: uploadFile(fileData)
+    
+    Note over Ctrl: 파일 크기 검증
+    Ctrl->>Ctrl: validateSize(file.size <= 1GB)
+    
+    alt 크기 1GB 초과 시 (예외 흐름)
+        Ctrl-->>UI: 업로드 실패 (용량 초과 에러)
+        UI-->>User: 경고 메시지 출력
+    else 정상 크기 시 (정상 흐름)
+        Ctrl->>DB: saveMetadata(fileName, size, date)
+        DB-->>Ctrl: DB 저장 완료
+        Ctrl-->>UI: 업로드 완료 응답
+        UI-->>User: 완료 메시지 및 파일 목록 갱신
+    end
+```
